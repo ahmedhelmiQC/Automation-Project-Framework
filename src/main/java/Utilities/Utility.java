@@ -18,10 +18,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.time.Duration;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Random;
-import java.util.Set;
+import java.util.*;
 
 public class  Utility {
     private static final  String SCREENSHOT_PATH = "test-outputs/screenshoot/";
@@ -108,7 +105,7 @@ public class  Utility {
         return new Random().nextInt(upperBound) + 1;
     }
 
-    //// Set >> unique 1,2,3,4,5  > condition
+    //TODO       Set >> unique 1,2,3,4,5  > condition
     public static Set<Integer> generateAddUniqueNumber(int numberOfProductsNeeded, int totalNumberOfProducts) {
         Set<Integer> generatedNumber = new HashSet<>();
         while (generatedNumber.size() < numberOfProductsNeeded) {
@@ -116,6 +113,38 @@ public class  Utility {
             generatedNumber.add(renderNumber);
         }
         return generatedNumber;
+    }
+
+    //TODO  verify URL
+    public static boolean verifyURL(WebDriver driver , String expectedURL){
+        try {
+            generalWait(driver).until(ExpectedConditions.urlToBe(expectedURL));
+        }catch (Exception e){
+            LogsUtils.error(e.getMessage());
+            return false;
+        }
+        return true;
+    }
+    //TODO Get Last Logs File
+    public static File getLastFile(String folderPath){
+        File folder = new File(folderPath);
+        File[]files = folder.listFiles();
+        assert files != null;
+        if (files.length == 0)
+            return null;
+        Arrays.sort(files, Comparator.comparing(File::lastModified).reversed());
+            return files[0];
+    }
+    //TODO Get All Cookies
+    public static Set<Cookie>getAllCookie(WebDriver driver){
+        return driver.manage().getCookies();
+    }
+
+    //TODO Restore Session
+    public static void restoreSession(WebDriver driver , Set<Cookie> cookies){
+        for (Cookie cookie:cookies){
+            driver.manage().addCookie(cookie);
+        }
     }
 
 
